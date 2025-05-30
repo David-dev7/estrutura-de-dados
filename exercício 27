@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100
+
+typedef struct {
+    int dados[MAX];
+    int topo;
+} Pilha;
+
+void push(Pilha* p, int val) {
+    p->dados[++p->topo] = val;
+}
+
+int pop(Pilha* p) {
+    return p->dados[p->topo--];
+}
+
+typedef struct {
+    Pilha s1, s2;
+} Fila;
+
+void fila_inicializar(Fila* f) {
+    f->s1.topo = -1;
+    f->s2.topo = -1;
+}
+
+void enfileirar(Fila* f, int val) {
+    push(&f->s1, val);
+}
+
+int desenfileirar(Fila* f) {
+    if (f->s2.topo == -1) {
+        while (f->s1.topo != -1) {
+            push(&f->s2, pop(&f->s1));
+        }
+    }
+    if (f->s2.topo == -1) return -1;
+    return pop(&f->s2);
+}
+
+int main() {
+    Fila f;
+    fila_inicializar(&f);
+    enfileirar(&f, 10);
+    enfileirar(&f, 20);
+    printf("%d\n", desenfileirar(&f));
+    printf("%d\n", desenfileirar(&f));
+    return 0;
+}
