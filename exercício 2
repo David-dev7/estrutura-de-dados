@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Estrutura do nó
+typedef struct No {
+    int valor;
+    struct No* prox;
+} No;
+
+// Inserir no fim para montar a lista
+void inserir_fim(No** lista, int valor) {
+    No* novo = malloc(sizeof(No));
+    novo->valor = valor;
+    novo->prox = NULL;
+
+    if (*lista == NULL) {
+        *lista = novo;
+    } else {
+        No* atual = *lista;
+        while (atual->prox != NULL)
+            atual = atual->prox;
+        atual->prox = novo;
+    }
+}
+
+// Função para contar o número de nós
+int contar_nos(No* lista) {
+    int contador = 0;
+    while (lista != NULL) {
+        contador++;
+        lista = lista->prox;
+    }
+    return contador;
+}
+
+// Imprimir lista (opcional para ver o que foi inserido)
+void imprimir_lista(No* lista) {
+    while (lista != NULL) {
+        printf("%d -> ", lista->valor);
+        lista = lista->prox;
+    }
+    printf("NULL\n");
+}
+
+// Função principal
+int main() {
+    No* lista = NULL;
+
+    inserir_fim(&lista, 10);
+    inserir_fim(&lista, 20);
+    inserir_fim(&lista, 30);
+
+    printf("Lista: ");
+    imprimir_lista(lista);
+
+    int total = contar_nos(lista);
+    printf("Total de nós: %d\n", total); // Saída esperada: 3
+
+    return 0;
+}
