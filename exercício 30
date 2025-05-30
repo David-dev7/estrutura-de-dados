@@ -1,0 +1,25 @@
+#include <stdio.h>
+
+int trapping_rain_water(int* heights, int n) {
+    int stack[n];
+    int topo = -1;
+    int i = 0, resultado = 0;
+    while (i < n) {
+        while (topo != -1 && heights[i] > heights[stack[topo]]) {
+            int base = stack[topo--];
+            if (topo == -1) break;
+            int dist = i - stack[topo] -1;
+            int altura = (heights[i] < heights[stack[topo]] ? heights[i] : heights[stack[topo]]) - heights[base];
+            resultado += dist * altura;
+        }
+        stack[++topo] = i++;
+    }
+    return resultado;
+}
+
+int main() {
+    int barras[] = {0,1,0,2,1,0,1,3,2,1,2,1};
+    int n = sizeof(barras)/sizeof(barras[0]);
+    printf("%d\n", trapping_rain_water(barras, n));
+    return 0;
+}
