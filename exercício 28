@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct No {
+    int valor;
+    struct No* prox;
+} No;
+
+No* inverter_grupo(No* head, int k, No** prox_grupo) {
+    No* prev = NULL;
+    No* curr = head;
+    int count = 0;
+    while (curr && count < k) {
+        No* next = curr->prox;
+        curr->prox = prev;
+        prev = curr;
+        curr = next;
+        count++;
+    }
+    *prox_grupo = curr;
+    return prev;
+}
+
+No* inverter_grupos(No* head, int k) {
+    if (!head || k == 1) return head;
+    No* novo_head = NULL;
+    No* prev_fim = NULL;
+    No* atual = head;
+
+    while (atual) {
+        No* prox_grupo = NULL;
+        No* inicio = atual;
+        No* fim = inverter_grupo(atual, k, &prox_grupo);
+        if (!novo_head) novo_head = fim;
+        if (prev_fim) prev_fim->prox = fim;
+        prev_fim = inicio;
+        atual = prox_grupo;
+    }
+    return novo_head;
+}
+
+void imprimir(No* head) {
+    while (head) {
+        printf("%d ", head->valor);
+        head = head->prox;
+    }
+    printf("\n");
+}
+
+int main() {
+    No nos[5];
+    for (int i = 0; i < 5; i++) {
+        nos[i].valor = i + 1;
+        nos[i].prox = (i < 4) ? &nos[i+1] : NULL;
+    }
+    No* nova = inverter_grupos(&nos[0], 2);
+    imprimir(nova);
+    return 0;
+}
