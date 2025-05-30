@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    int* dados;
+    int topo;
+    int capacidade;
+} Pilha;
+
+void pilha_inicializar(Pilha* p, int tamanho) {
+    p->dados = malloc(tamanho * sizeof(int));
+    p->topo = -1;
+    p->capacidade = tamanho;
+}
+
+void pilha_push(Pilha* p, int valor) {
+    if (p->topo < p->capacidade - 1) p->dados[++(p->topo)] = valor;
+}
+
+int pilha_pop(Pilha* p) {
+    if (p->topo == -1) return -1;
+    return p->dados[(p->topo)--];
+}
+
+int pilha_vazia(Pilha* p) {
+    return p->topo == -1;
+}
+
+int pilha_topo(Pilha* p) {
+    if (p->topo == -1) return -1;
+    return p->dados[p->topo];
+}
+
+void ordenar_pilha(Pilha* p) {
+    Pilha aux;
+    pilha_inicializar(&aux, p->capacidade);
+    while (!pilha_vazia(p)) {
+        int temp = pilha_pop(p);
+        while (!pilha_vazia(&aux) && pilha_topo(&aux) > temp) {
+            pilha_push(p, pilha_pop(&aux));
+        }
+        pilha_push(&aux, temp);
+    }
+    while (!pilha_vazia(&aux)) pilha_push(p, pilha_pop(&aux));
+}
+
+int main() {
+    Pilha p;
+    pilha_inicializar(&p, 10);
+    pilha_push(&p, 3);
+    pilha_push(&p, 1);
+    pilha_push(&p, 4);
+    pilha_push(&p, 2);
+    ordenar_pilha(&p);
+    while (!pilha_vazia(&p)) printf("%d ", pilha_pop(&p));
+    printf("\n");
+    free(p.dados);
+    return 0;
+}
