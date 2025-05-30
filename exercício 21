@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct No {
+    int valor;
+    struct No* prox;
+} No;
+
+No* remover_todas_ocorrencias(No* head, int val) {
+    while (head && head->valor == val) {
+        No* temp = head;
+        head = head->prox;
+        free(temp);
+    }
+    No* atual = head;
+    while (atual && atual->prox) {
+        if (atual->prox->valor == val) {
+            No* temp = atual->prox;
+            atual->prox = temp->prox;
+            free(temp);
+        } else {
+            atual = atual->prox;
+        }
+    }
+    return head;
+}
+
+void imprimir(No* head) {
+    while (head) {
+        printf("%d ", head->valor);
+        head = head->prox;
+    }
+    printf("\n");
+}
+
+int main() {
+    No* a = malloc(sizeof(No));
+    No* b = malloc(sizeof(No));
+    No* c = malloc(sizeof(No));
+    a->valor = 1; a->prox = b;
+    b->valor = 2; b->prox = c;
+    c->valor = 1; c->prox = NULL;
+    No* nova = remover_todas_ocorrencias(a, 1);
+    imprimir(nova);
+    // liberar memória omitido para brevidade
+    return 0;
+}
