@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Estrutura do nó
+typedef struct No {
+    int valor;
+    struct No* prox;
+} No;
+
+// Inserir no fim (para facilitar montagem da lista)
+void inserir_fim(No** lista, int valor) {
+    No* novo = malloc(sizeof(No));
+    novo->valor = valor;
+    novo->prox = NULL;
+
+    if (*lista == NULL) {
+        *lista = novo;
+    } else {
+        No* atual = *lista;
+        while (atual->prox != NULL)
+            atual = atual->prox;
+        atual->prox = novo;
+    }
+}
+
+// Função para buscar elemento
+int buscar_elemento(No* lista, int valor) {
+    while (lista != NULL) {
+        if (lista->valor == valor)
+            return 1;
+        lista = lista->prox;
+    }
+    return 0;
+}
+
+// Imprimir a lista (opcional)
+void imprimir_lista(No* lista) {
+    while (lista != NULL) {
+        printf("%d -> ", lista->valor);
+        lista = lista->prox;
+    }
+    printf("NULL\n");
+}
+
+// Função principal
+int main() {
+    No* lista = NULL;
+
+    inserir_fim(&lista, 5);
+    inserir_fim(&lista, 10);
+    inserir_fim(&lista, 15);
+
+    printf("Lista: ");
+    imprimir_lista(lista);
+
+    int valor_busca = 10;
+    if (buscar_elemento(lista, valor_busca)) {
+        printf("Valor %d encontrado na lista.\n", valor_busca);
+    } else {
+        printf("Valor %d NÃO encontrado na lista.\n", valor_busca);
+    }
+
+    return 0;
+}
