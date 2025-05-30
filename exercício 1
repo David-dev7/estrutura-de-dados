@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Estrutura básica do nó
+typedef struct No {
+    int valor;
+    struct No* prox;
+} No;
+
+// Inserir no início da lista
+void inserir_inicio(No** lista, int valor) {
+    No* novo = malloc(sizeof(No));
+    novo->valor = valor;
+    novo->prox = *lista;
+    *lista = novo;
+}
+
+// Inserir no fim da lista
+void inserir_fim(No** lista, int valor) {
+    No* novo = malloc(sizeof(No));
+    novo->valor = valor;
+    novo->prox = NULL;
+
+    if (*lista == NULL) {
+        *lista = novo;
+    } else {
+        No* atual = *lista;
+        while (atual->prox != NULL) {
+            atual = atual->prox;
+        }
+        atual->prox = novo;
+    }
+}
+
+// Função para imprimir a lista (para teste)
+void imprimir_lista(No* lista) {
+    while (lista != NULL) {
+        printf("%d -> ", lista->valor);
+        lista = lista->prox;
+    }
+    printf("NULL\n");
+}
+
+// Exemplo de uso
+int main() {
+    No* lista = NULL;
+
+    inserir_fim(&lista, 10);
+    inserir_inicio(&lista, 5);
+
+    imprimir_lista(lista); // Saída esperada: 5 -> 10 -> NULL
+
+    return 0;
+}
