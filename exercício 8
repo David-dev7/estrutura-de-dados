@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct No {
+    int valor;
+    struct No* prox;
+} No;
+
+// Pilha simples usando lista encadeada
+typedef struct PilhaNo {
+    int valor;
+    struct PilhaNo* prox;
+} PilhaNo;
+
+void push(PilhaNo** topo, int valor) {
+    PilhaNo* novo = malloc(sizeof(PilhaNo));
+    novo->valor = valor;
+    novo->prox = *topo;
+    *topo = novo;
+}
+
+int pop(PilhaNo** topo) {
+    if (*topo == NULL) return -1; // Pilha vazia
+    PilhaNo* temp = *topo;
+    int val = temp->valor;
+    *topo = temp->prox;
+    free(temp);
+    return val;
+}
+
+void imprimir_reversa(No* lista) {
+    PilhaNo* pilha = NULL;
+
+    while (lista != NULL) {
+        push(&pilha, lista->valor);
+        lista = lista->prox;
+    }
+
+    printf("Lista na ordem reversa:\n");
+    while (pilha != NULL) {
+        printf("%d -> ", pop(&pilha));
+    }
+    printf("NULL\n");
+}
+
+void inserir_fim(No** lista, int valor) {
+    No* novo = malloc(sizeof(No));
+    novo->valor = valor;
+    novo->prox = NULL;
+
+    if (*lista == NULL) {
+        *lista = novo;
+    } else {
+        No* atual = *lista;
+        while (atual->prox != NULL)
+            atual = atual->prox;
+        atual->prox = novo;
+    }
+}
+
+void imprimir_lista(No* lista) {
+    while (lista != NULL) {
+        printf("%d -> ", lista->valor);
+        lista = lista->prox;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    No* lista = NULL;
+
+    inserir_fim(&lista, 1);
+    inserir_fim(&lista, 2);
+    inserir_fim(&lista, 3);
+    inserir_fim(&lista, 4);
+
+    printf("Lista normal:\n");
+    imprimir_lista(lista);
+
+    imprimir_reversa(lista);
+
+    return 0;
+}
