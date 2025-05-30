@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct {
+    char* dados;
+    int topo;
+    int capacidade;
+} Pilha;
+
+void pilha_inicializar(Pilha* p, int tamanho) {
+    p->dados = malloc(tamanho * sizeof(char));
+    p->topo = -1;
+    p->capacidade = tamanho;
+}
+
+void pilha_push(Pilha* p, char c) {
+    if (p->topo < p->capacidade - 1) p->dados[++(p->topo)] = c;
+}
+
+char pilha_pop(Pilha* p) {
+    if (p->topo == -1) return '\0';
+    return p->dados[(p->topo)--];
+}
+
+int pilha_vazia(Pilha* p) {
+    return p->topo == -1;
+}
+
+void inverter_string(char* str) {
+    int n = strlen(str);
+    Pilha p;
+    pilha_inicializar(&p, n);
+    for (int i = 0; i < n; i++) pilha_push(&p, str[i]);
+    for (int i = 0; i < n; i++) str[i] = pilha_pop(&p);
+    free(p.dados);
+}
+
+int main() {
+    char str[] = "hello";
+    inverter_string(str);
+    printf("%s\n", str);
+    return 0;
+}
