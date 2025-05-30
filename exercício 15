@@ -1,0 +1,46 @@
+#include <stdio.h>
+
+#define MAX 100
+
+typedef struct {
+    int dados[MAX];
+    int inicio, fim, tamanho;
+} Fila;
+
+void inicializar(Fila* f) {
+    f->inicio = 0;
+    f->fim = -1;
+    f->tamanho = 0;
+}
+
+int enfileirar(Fila* f, int valor) {
+    if (f->tamanho == MAX) return 0;
+    f->fim = (f->fim + 1) % MAX;
+    f->dados[f->fim] = valor;
+    f->tamanho++;
+    return 1;
+}
+
+int desenfileirar(Fila* f) {
+    if (f->tamanho == 0) return -1;
+    int valor = f->dados[f->inicio];
+    f->inicio = (f->inicio + 1) % MAX;
+    f->tamanho--;
+    return valor;
+}
+
+int frente(Fila* f) {
+    if (f->tamanho == 0) return -1;
+    return f->dados[f->inicio];
+}
+
+int main() {
+    Fila f;
+    inicializar(&f);
+    enfileirar(&f, 10);
+    enfileirar(&f, 20);
+    printf("%d\n", frente(&f));
+    printf("%d\n", desenfileirar(&f));
+    printf("%d\n", desenfileirar(&f));
+    return 0;
+}
