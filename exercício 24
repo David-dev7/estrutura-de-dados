@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    int* dados;
+    int* minimos;
+    int topo;
+    int capacidade;
+} Pilha;
+
+void pilha_inicializar(Pilha* p, int capacidade) {
+    p->dados = malloc(capacidade * sizeof(int));
+    p->minimos = malloc(capacidade * sizeof(int));
+    p->topo = -1;
+    p->capacidade = capacidade;
+}
+
+void pilha_push(Pilha* p, int val) {
+    if (p->topo == p->capacidade - 1) return;
+    p->topo++;
+    p->dados[p->topo] = val;
+    if (p->topo == 0) p->minimos[p->topo] = val;
+    else p->minimos[p->topo] = (val < p->minimos[p->topo - 1]) ? val : p->minimos[p->topo - 1];
+}
+
+void pilha_pop(Pilha* p) {
+    if (p->topo == -1) return;
+    p->topo--;
+}
+
+int pilha_topo(Pilha* p) {
+    if (p->topo == -1) return -1;
+    return p->dados[p->topo];
+}
+
+int obter_minimo(Pilha* p) {
+    if (p->topo == -1) return -1;
+    return p->minimos[p->topo];
+}
+
+int main() {
+    Pilha p;
+    pilha_inicializar(&p, 10);
+    pilha_push(&p, 5);
+    pilha_push(&p, 3);
+    pilha_push(&p, 7);
+    printf("Minimo: %d\n", obter_minimo(&p));
+    pilha_pop(&p);
+    printf("Minimo: %d\n", obter_minimo(&p));
+    return 0;
+}
