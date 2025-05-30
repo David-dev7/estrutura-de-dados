@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct No {
+    int valor;
+    struct No* prox;
+} No;
+
+No* rotacionar_lista(No* head, int k) {
+    if (!head || k == 0) return head;
+    No* atual = head;
+    int tamanho = 1;
+    while (atual->prox) {
+        atual = atual->prox;
+        tamanho++;
+    }
+    atual->prox = head;
+    k = k % tamanho;
+    int passos = tamanho - k;
+    while (passos--) {
+        atual = atual->prox;
+    }
+    head = atual->prox;
+    atual->prox = NULL;
+    return head;
+}
+
+void imprimir(No* head) {
+    while (head) {
+        printf("%d ", head->valor);
+        head = head->prox;
+    }
+    printf("\n");
+}
+
+int main() {
+    No a = {1, NULL}, b = {2, NULL}, c = {3, NULL}, d = {4, NULL}, e = {5, NULL};
+    a.prox = &b; b.prox = &c; c.prox = &d; d.prox = &e;
+    No* nova = rotacionar_lista(&a, 2);
+    imprimir(nova);
+    return 0;
+}
