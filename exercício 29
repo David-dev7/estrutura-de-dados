@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct No {
+    int valor;
+    struct No* prox;
+} No;
+
+No* inverter(No* head) {
+    No* prev = NULL;
+    No* curr = head;
+    while (curr) {
+        No* next = curr->prox;
+        curr->prox = prev;
+        prev = curr;
+        curr = next;
+    }
+    return prev;
+}
+
+int eh_palindromo(No* head) {
+    if (!head || !head->prox) return 1;
+    No* lento = head;
+    No* rapido = head;
+    while (rapido->prox && rapido->prox->prox) {
+        lento = lento->prox;
+        rapido = rapido->prox->prox;
+    }
+    No* segunda_metade = inverter(lento->prox);
+    No* inicio_segunda = segunda_metade;
+    No* p1 = head;
+    int palindromo = 1;
+    while (segunda_metade) {
+        if (p1->valor != segunda_metade->valor) {
+            palindromo = 0;
+            break;
+        }
+        p1 = p1->prox;
+        segunda_metade = segunda_metade->prox;
+    }
+    lento->prox = inverter(inicio_segunda);
+    return palindromo;
+}
+
+int main() {
+    No nos[5] = {{1,NULL},{2,NULL},{3,NULL},{2,NULL},{1,NULL}};
+    for (int i = 0; i < 4; i++) nos[i].prox = &nos[i+1];
+    printf("%d\n", eh_palindromo(&nos[0]));
+    nos[2].valor = 4;
+    printf("%d\n", eh_palindromo(&nos[0]));
+    return 0;
+}
