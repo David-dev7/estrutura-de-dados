@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100
+
+typedef struct {
+    int dados[MAX];
+    int inicio, fim, tamanho;
+} Fila;
+
+void inicializar(Fila* f) {
+    f->inicio = 0;
+    f->fim = -1;
+    f->tamanho = 0;
+}
+
+int enfileirar(Fila* f, int valor) {
+    if (f->tamanho == MAX) return 0;
+    f->fim = (f->fim + 1) % MAX;
+    f->dados[f->fim] = valor;
+    f->tamanho++;
+    return 1;
+}
+
+int desenfileirar(Fila* f) {
+    if (f->tamanho == 0) return -1;
+    int valor = f->dados[f->inicio];
+    f->inicio = (f->inicio + 1) % MAX;
+    f->tamanho--;
+    return valor;
+}
+
+void inverter_primeiros_k(Fila* f, int k) {
+    if (k > f->tamanho) return;
+    int pilha[MAX];
+    int topo = -1;
+    for (int i = 0; i < k; i++) {
+        pilha[++topo] = desenfileirar(f);
+    }
+    while (topo >= 0) {
+        enfileirar(f, pilha[topo--]);
+    }
+    int tamanho_restante = f->tamanho - k;
+    for (int i = 0; i < tamanho_restante; i++) {
+        enfileirar(f, desenfileirar(f));
+    }
+}
+
+void imprimir_fila(Fila* f) {
+    int i = f->inicio;
+    for (int count = 0; count < f->tamanho; count++) {
+        printf("%d ", f->dados[i]);
+        i = (i + 1) % MAX;
+    }
+    printf("\n");
+}
+
+int main() {
+    Fila f;
+    inicializar(&f);
+    for (int i = 1; i <= 5; i++) enfileirar(&f, i);
+    inverter_primeiros_k(&f, 3);
+    imprimir_fila(&f);
+    return 0;
+}
